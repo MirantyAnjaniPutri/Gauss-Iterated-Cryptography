@@ -7,14 +7,15 @@ def gauss_iterated_map(x, alpha, beta, omega, K, phi, iterations):
     result = []
     for _ in range(iterations):
         x = math.exp(-alpha * (5/4 * ((x + omega + K / (2 * math.pi) * math.sin(2 * math.pi * x)) % 1) - 1/2)**2 + beta)
-        y = x * 10**13
+        y = int(x * 10**13)
         result.append(y)
     return result
 
 def write_key_to_file(key, filename):
     with open(filename, 'w') as file:
         for value in key:
-            file.write(f"{value}\n")
+            binary_value = "{0:b}".format(value)
+            file.write(f"{binary_value}\n")
 
 def encrypt(image_path, key):
     image = Image.open(image_path)
