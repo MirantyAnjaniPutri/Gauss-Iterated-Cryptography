@@ -7,7 +7,8 @@ def gauss_iterated_map(x, alpha, beta, omega, K, phi, iterations):
     result = []
     for _ in range(iterations):
         x = math.exp(-alpha * (5/4 * ((x + omega + K / (2 * math.pi) * math.sin(2 * math.pi * x)) % 1) - 1/2)**2 + beta)
-        result.append(x)
+        y = x * 10**13
+        result.append(y)
     return result
 
 def write_key_to_file(key, filename):
@@ -53,7 +54,7 @@ key = gauss_iterated_map(initial_x, alpha, beta, omega, K, phi, iterations)
 write_key_to_file(key, "key.txt")
 
 # Encrypt image
-encrypted_image = encrypt("maestro.png", key)
+encrypted_image = encrypt("test_1.jpg", key)
 encrypted_image.save("encrypted_image.png")
 
 # Decrypt image
