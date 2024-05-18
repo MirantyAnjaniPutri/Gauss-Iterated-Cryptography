@@ -1,2 +1,4 @@
 *.exe filter=lfs diff=lfs merge=lfs -text
 BIG-FILES/build/gauss_iterated_app/gauss_iterated_app.pkg filter=lfs diff=lfs merge=lfs -text
+dist/gauss_iterated_app.exe filter=lfs diff=lfs merge=lfs -text
+build/gauss_iterated_app/gauss_iterated_app.pkg filter=lfs diff=lfs merge=lfs -text
