@@ -1,63 +1,79 @@
 import numpy as np
 from PIL import Image
-
 import math
 
-def gauss_iterated_map(x, alpha, beta, omega, K, phi, iterations):
-    result = []
-    for _ in range(iterations):
-        x = math.exp(-alpha * (5/4 * ((x + omega + K / (2 * math.pi) * math.sin(2 * math.pi * x)) % 1) - 1/2)**2 + beta)
-        y = int(x * 10**13)
-        result.append(y)
-    return result
+class GaussCircleCrypto:
+    def __init__(self, initial_x = 0.5, iterations = 10000):
+        self.initial_x = initial_x
+        self.iterations = iterations
+        self.alpha = 9
+        self.beta = 0.481
+        self.omega = 0.5
+        self.K = 1000000
 
-def write_key_to_file(key, filename):
-    with open(filename, 'w') as file:
-        for value in key:
-            binary_value = "{0:b}".format(value)
-            file.write(f"{binary_value}\n")
+    def gauss_iterated_map(self):
+        result = []
+        x = self.initial_x
+        for _ in range(self.iterations):
+            x = math.exp(-self.alpha * (5/4 * ((x + self.omega + self.K / (2 * math.pi) * math.sin(2 * math.pi * x)) % 1) - 1/2)**2 + self.beta)
+            y = int(x * 10**13)
+            result.append(y)
+        return result
 
-def encrypt(image_path, key):
-    image = Image.open(image_path)
-    image_array = np.array(image)
-    flattened_image = image_array.flatten()
+    def write_key_to_file(self, key, filename):
+        with open(filename, 'w') as file:
+            for value in key:
+                binary_value = "{0:b}".format(value)
+                file.write(f"{binary_value}\n")
 
-    # XOR each pixel value with the corresponding key value
-    encrypted_data = [pixel ^ int(key[i % len(key)] * 255) for i, pixel in enumerate(flattened_image)]
+    def encrypt(self, image_path, key):
+        image = Image.open(image_path)
+        image_array = np.array(image)
+        flattened_image = image_array.flatten()
 
-    encrypted_image = np.array(encrypted_data, dtype=np.uint8).reshape(image_array.shape)
-    return Image.fromarray(encrypted_image)
+        # XOR each pixel value with the corresponding key value
+        encrypted_data = [pixel ^ int(key[i % len(key)] * 255) for i, pixel in enumerate(flattened_image)]
 
-def decrypt(encrypted_image_path, key):
-    encrypted_image = Image.open(encrypted_image_path)
-    encrypted_image_array = np.array(encrypted_image)
-    flattened_encrypted_data = encrypted_image_array.flatten()
+        encrypted_image = np.array(encrypted_data, dtype=np.uint8).reshape(image_array.shape)
+        return Image.fromarray(encrypted_image)
+    
+    def read_key_from_file(self, filename):
+        key = []
+        with open(filename, 'r') as file:
+            for line in file:
+                # Convert binary string to integer
+                key_value = int(line.strip(), 2)
+                key.append(key_value)
+        return key
 
-    # XOR each pixel value with the corresponding key value
-    decrypted_data = [pixel ^ int(key[i % len(key)] * 255) for i, pixel in enumerate(flattened_encrypted_data)]
 
-    decrypted_image = np.array(decrypted_data, dtype=np.uint8).reshape(encrypted_image_array.shape)
-    return Image.fromarray(decrypted_image)
+    def decrypt(self, encrypted_image_path, key):
+        encrypted_image = Image.open(encrypted_image_path)
+        encrypted_image_array = np.array(encrypted_image)
+        flattened_encrypted_data = encrypted_image_array.flatten()
 
-# Example usage
-initial_x = 0.5  # Initial value of x for the Gauss map
-alpha = 4      # Value of alpha
-beta = 0.8       # Value of beta
-omega = 0.8      # Value of omega
-K = 1000000          # Value of K
-phi = math.pi        # Value of phi
-iterations = 10000  # Number of iterations for the Gauss map
+        # XOR each pixel value with the corresponding key value
+        decrypted_data = [pixel ^ int(key[i % len(key)] * 255) for i, pixel in enumerate(flattened_encrypted_data)]
 
-# Generate key using gauss_iterated_map
-key = gauss_iterated_map(initial_x, alpha, beta, omega, K, phi, iterations)
+        decrypted_image = np.array(decrypted_data, dtype=np.uint8).reshape(encrypted_image_array.shape)
+        return Image.fromarray(decrypted_image)
 
-# Write key to file
-write_key_to_file(key, "key.txt")
 
-# Encrypt image
-encrypted_image = encrypt("test_1.jpg", key)
-encrypted_image.save("encrypted_image.png")
+# # Generate key using gauss_iterated_map
+# encryptor = GaussCircleCrypto()
 
-# Decrypt image
-decrypted_image = decrypt("encrypted_image.png", key)
-decrypted_image.show()
+# # Generate key using gauss_iterated_map
+# key = encryptor.gauss_iterated_map()
+
+# # Write key to file
+# encryptor.write_key_to_file(key, "key.txt")
+
+# read_key = encryptor.read_key_from_file("key.txt")
+
+# # Encrypt image
+# encrypted_image = encryptor.encrypt("maestro.png", key)
+# encrypted_image.save("encrypted_image.png")
+
+# # Decrypt image
+# decrypted_image = encryptor.decrypt("encrypted_image.png", read_key)
+# decrypted_image.show()
