@@ -3,6 +3,7 @@ from tkinter import messagebox, filedialog
 from PIL import Image, ImageTk
 import os
 from gauss_iterated_crypto import GaussCircleCrypto
+import time
 
 class appGaussCircleIterated:
     
@@ -68,6 +69,9 @@ class appGaussCircleIterated:
         self.start_encrypt_button = tk.Button(self.bottom_frame, text="Encrypt", command=self.encrypt_image)
         self.start_encrypt_button.grid(column = 1, row=1, padx=10, pady=10)
 
+        self.encryption_duration_label = tk.Label(self.bottom_frame, text="Encryption Duration: ")
+        self.encryption_duration_label.grid(column=1, row=2, padx=10, pady=10)
+
         self.encrypt_result = tk.Label(self.bottom_frame, text="Encryption Image Result")
         self.encrypt_result.grid(column = 2, row=0, padx=10, pady=10)
 
@@ -96,6 +100,9 @@ class appGaussCircleIterated:
         self.start_decrypt_button = tk.Button(self.bottom_frame, text="Decrypt", command=self.decrypt_image)
         self.start_decrypt_button.grid(column = 1, row=1, padx=10, pady=10)
         
+        self.decryption_duration_label = tk.Label(self.bottom_frame, text="Decryption Duration: ")
+        self.decryption_duration_label.grid(column=1, row=2, padx=10, pady=10)
+
         self.decrypt_result = tk.Label(self.bottom_frame, text="Decryption Image Result")
         self.decrypt_result.grid(column = 2, row=0, padx=10, pady=10)
 
@@ -137,11 +144,15 @@ class appGaussCircleIterated:
             messagebox.showerror("Error", "Please select an image and a key file.")
             return
         
+        start_time_encryption = time.time()
         crypto = GaussCircleCrypto()
         self.encryption_key = crypto.gauss_iterated_map()
         self.encrypted_image = crypto.encrypt(self.filepath_img, self.encryption_key)
+        end_time_encryption = time.time()
+        encryption_duration = end_time_encryption - start_time_encryption
         if self.encrypted_image:
             self.show_encrypted_image_preview()
+            self.encryption_duration_label.config(text=f"Encryption Duration: {encryption_duration:.2f} seconds")
         else:
             messagebox.showerror("Error", "Encryption failed. Please try again.")
 
@@ -186,11 +197,15 @@ class appGaussCircleIterated:
             messagebox.showerror("Error", "Please select an image and a key file.")
             return
         
+        start_time_decryption = time.time()
         crypto = GaussCircleCrypto()
         read_key = crypto.read_key_from_file(self.filepath_key)
         self.decrypted_image = crypto.decrypt(self.filepath_img, read_key)
+        end_time_decryption = time.time()
+        decryption_duration = end_time_decryption - start_time_decryption
         if self.decrypted_image:
             self.show_decrypted_image_preview()
+            self.decryption_duration_label.config(text=f"Decryption Duration: {decryption_duration:.2f} seconds")
         else:
             messagebox.showerror("Error", "Decryption failed. The key and the image do not match.")
     
