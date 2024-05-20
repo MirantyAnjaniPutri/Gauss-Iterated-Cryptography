@@ -112,3 +112,23 @@ print(f"NPCR: {npcr}")
 # Calculate PSNR
 psnr_value = TestAlgorithm.psnr(original_image, decrypted_image)
 print(f"PSNR: {psnr_value}")
+=======
+
+# # Generate key using gauss_iterated_map
+# encryptor = GaussCircleCrypto()
+
+# # Generate key using gauss_iterated_map
+# key = encryptor.gauss_iterated_map()
+
+# # Write key to file
+# encryptor.write_key_to_file(key, "key.txt")
+
+# read_key = encryptor.read_key_from_file("key.txt")
+
+# # Encrypt image
+# encrypted_image = encryptor.encrypt("maestro.png", key)
+# encrypted_image.save("encrypted_image.png")
+
+# # Decrypt image
+# decrypted_image = encryptor.decrypt("encrypted_image.png", read_key)
+# decrypted_image.show()
