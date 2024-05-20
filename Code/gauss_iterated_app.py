@@ -68,7 +68,7 @@ class appGaussCircleIterated:
 
         self.start_encrypt_button = tk.Button(self.bottom_frame, text="Encrypt", command=self.encrypt_image)
         self.start_encrypt_button.grid(column = 1, row=1, padx=10, pady=10)
-
+        
         self.encryption_duration_label = tk.Label(self.bottom_frame, text="Encryption Duration: ")
         self.encryption_duration_label.grid(column=1, row=2, padx=10, pady=10)
 

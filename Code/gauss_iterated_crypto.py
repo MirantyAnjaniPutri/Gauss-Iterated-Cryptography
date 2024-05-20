@@ -1,6 +1,8 @@
 import numpy as np
 from PIL import Image
 import math
+import time
+from test_algorithm import TestAlgorithm
 
 class GaussCircleCrypto:
     def __init__(self, initial_x = 0.5, iterations = 10000):
@@ -58,6 +60,59 @@ class GaussCircleCrypto:
         decrypted_image = np.array(decrypted_data, dtype=np.uint8).reshape(encrypted_image_array.shape)
         return Image.fromarray(decrypted_image)
 
+# These code used for test the encryption and decryption process
+# Generate key using gauss_iterated_map
+encryptor = GaussCircleCrypto()
+
+# Generate key using gauss_iterated_map
+key = encryptor.gauss_iterated_map()
+
+# Write key to file
+encryptor.write_key_to_file(key, "key.txt")
+
+read_key = encryptor.read_key_from_file("key.txt")
+num_runs = 10
+encryption_times = []
+decryption_times = []
+
+for i in range(num_runs):
+    # Encrypt image
+    start_time = time.time()
+    encrypted_image = encryptor.encrypt(".../Input Images/maestro.png", key)
+    encryption_time = time.time() - start_time
+    encryption_times.append(encryption_time)
+    encrypted_image.save(f"encrypted_image{i}.png")
+
+    # Decrypt image
+    start_time = time.time()
+    decrypted_image = encryptor.decrypt(f"encrypted_image{i}.png", read_key)
+    decryption_time = time.time() - start_time
+    decryption_times.append(decryption_time)
+
+    print(f"Run {i+1}: Encryption time: {encryption_time} seconds, Decryption time: {decryption_time} seconds")
+
+# Calculate average runtime
+average_encryption_time = sum(encryption_times) / num_runs
+average_decryption_time = sum(decryption_times) / num_runs
+
+# Calculate average runtime
+average_encryption_time = sum(encryption_times) / num_runs
+average_decryption_time = sum(decryption_times) / num_runs
+
+print(f"Average encryption time over {num_runs} runs: {average_encryption_time} seconds")
+print(f"Average decryption time over {num_runs} runs: {average_decryption_time} seconds")
+
+# Calculate UACI and NPCR
+original_image = Image.open(".../Input Images/maestro.png")
+uaci= TestAlgorithm.uaci(original_image, decrypted_image)
+npcr= TestAlgorithm.npcrv(original_image, decrypted_image)
+print(f"UACI: {uaci}")
+print(f"NPCR: {npcr}")
+
+# Calculate PSNR
+psnr_value = TestAlgorithm.psnr(original_image, decrypted_image)
+print(f"PSNR: {psnr_value}")
+=======
 
 # # Generate key using gauss_iterated_map
 # encryptor = GaussCircleCrypto()
