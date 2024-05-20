@@ -1,9 +1,0 @@
-Fitur-fitur yang diperlukan untuk Kriptografi
-
-Button:
-Mode: Encrypt or Decrypt
-Perform Operation
-Save Output Image
-
-Text field
-Input Parameters: r1-r3, x1-x3
