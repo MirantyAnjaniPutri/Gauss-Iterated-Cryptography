@@ -59,6 +59,21 @@ class GaussCircleCrypto:
 
         decrypted_image = np.array(decrypted_data, dtype=np.uint8).reshape(encrypted_image_array.shape)
         return Image.fromarray(decrypted_image)
+    
+    # def calculate_lyapunov_exponent(self):
+    #     x = self.initial_x
+    #     sum_log_deriv = 0
+    #     for _ in range(self.iterations):
+    #         # Calculate the derivative of the map at x
+    #         derivative = abs(-self.alpha * (5/4) * 2 * (x + self.omega + self.K / (2 * math.pi) * math.sin(2 * math.pi * x)) * math.exp(-self.alpha * (5/4 * ((x + self.omega + self.K / (2 * math.pi) * math.sin(2 * math.pi * x)) % 1) - 1/2)**2))
+    #         sum_log_deriv += math.log(derivative)
+            
+    #         # Update x using the Gauss iterated map
+    #         x = math.exp(-self.alpha * (5/4 * ((x + self.omega + self.K / (2 * math.pi) * math.sin(2 * math.pi * x)) % 1) - 1/2)**2 + self.beta)
+        
+    #     # Calculate the Lyapunov exponent
+    #     lyapunov_exponent = sum_log_deriv / self.iterations
+    #     return lyapunov_exponent
 
 # # These code used for test the encryption and decryption process
 # # Generate key using gauss_iterated_map
